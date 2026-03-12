@@ -1,2 +1,2 @@
 # Projet-Moteur-Physique-Python-
-Projet NSI seulement quelques moi pour la réalisation.
+Projet NSI seulement quelques mois pour la réalisation.
