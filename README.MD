@@ -9,3 +9,4 @@
         Voici la documentation: https://pypi.org/project/PySDL2/
         Tutoriel pour avoir les bases: https://pysdl2.readthedocs.io/en/0.9.13/
 
+installer les dépéndances dans le requirement.txt
