@@ -1,5 +1,6 @@
 # Projet-Moteur-Physique-Python-
 Projet NSI seulement quelques mois pour la réalisation.
 
-nom du groupe : l'équipe des réptiliens 
+nom du groupe : l'équipe des réptiliens  
 bztmayoub
+pas gentil
