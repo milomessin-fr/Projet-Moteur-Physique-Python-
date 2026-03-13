@@ -18,14 +18,17 @@ class MoteurPhysique:
         self.CUBE_Y = 50     
         sprite_carre = self.factory.from_color(sdl2.ext.Color(255, 0, 0), size=(self.CUBE_X, self.CUBE_Y))
         self.mon_carre = Carre(sprite_carre, x=100, y=100)
-                
+        
+        # Définition des limites du monde
+        self.WORLD_X = 40
+        self.WORLD_Y = 40
+        self.WORLD_WIDTH = 520
+        self.WORLD_HEIGHT = 620
 
+    
     def construire(self):
         """Construction de la scène"""
-        WORLD_X = 40
-        WORLD_Y = 40
-        WORLD_WIDTH = 520
-        WORLD_HEIGHT = 620
+        
 
         raw_r = self.renderer.sdlrenderer
 
@@ -35,7 +38,7 @@ class MoteurPhysique:
         sdl2.render.SDL_RenderClear(raw_r)
         
         # 2. Bordure 
-        container_rect = sdl2.SDL_Rect(WORLD_X, WORLD_Y, WORLD_WIDTH, WORLD_HEIGHT)
+        container_rect = sdl2.SDL_Rect(self.WORLD_X, self.WORLD_Y, self.WORLD_WIDTH, self.WORLD_HEIGHT)
         sdl2.render.SDL_SetRenderDrawColor(raw_r, 0, 255, 0, 255) 
         sdl2.render.SDL_RenderDrawRect(raw_r, container_rect)
 
@@ -64,10 +67,10 @@ class MoteurPhysique:
         prochaine_x = self.mon_carre.x + (self.mon_carre.v_x * dt)
         prochaine_y = self.mon_carre.y + (self.mon_carre.v_y * dt)
 
-        if prochaine_x < 40 or prochaine_x + self.CUBE_X > 560:
+        if prochaine_x < self.WORLD_X or prochaine_x + self.CUBE_X > self.WORLD_X + self.WORLD_WIDTH:
             self.mon_carre.v_x *= -1
 
-        if prochaine_y < 40 or prochaine_y + self.CUBE_Y > 660:
+        if prochaine_y < self.WORLD_Y or prochaine_y + self.CUBE_Y > self.WORLD_Y + self.WORLD_HEIGHT:
             self.mon_carre.v_y *= -1
 
         self.mon_carre.update_movement(dt)
