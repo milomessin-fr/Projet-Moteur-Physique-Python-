@@ -29,7 +29,7 @@ class MoteurPhysique:
 
         
         # 1. Fond
-        sdl2.render.SDL_SetRenderDrawColor(raw_r, 30, 40, 36, 255)
+        sdl2.render.SDL_SetRenderDrawColor(raw_r, 0, 0, 0, 255)
         sdl2.render.SDL_RenderClear(raw_r)
         
         # 2. Bordure 
@@ -55,12 +55,23 @@ class MoteurPhysique:
                 return False
         return True
     
+    
+    
     def colision(self, dt):
         """Gestion des collisions"""
-        prochaine_x = cube_x + (vel_x * dt)
-        prochaine_y = cube_y + (vel_y * dt)
+        prochaine_x = self.mon_carre.x + (self.mon_carre.v_x * dt)
+        prochaine_y = self.mon_carre.y + (self.mon_carre.v_y * dt)
 
+        if prochaine_x < 40 or prochaine_x + self.CUBE_X > 560:
+            self.mon_carre.v_x *= -1
+
+        if prochaine_y < 40 or prochaine_y + self.CUBE_Y > 660:
+            self.mon_carre.v_y *= -1
+
+        self.mon_carre.update_movement(dt)
     
+
+
     def run_app(self):
         """"Lance la boucle principale du moteur """
         running = True
@@ -80,6 +91,7 @@ class MoteurPhysique:
             self.handle_input()
             self.construire()
             self.colision(dt)
+            
 
         sdl2.ext.quit()
 

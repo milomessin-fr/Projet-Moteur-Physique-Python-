@@ -7,13 +7,14 @@ class Carre:
         self.sprite.owner = self
         self.x = x
         self.y = y
-        self.vx = 100 
-        self.vy = 100 
+        self.v_x = 300 
+        self.v_y = 300 
 
-    def update(self, dt):
-        self.x += self.vx * dt
-        self.y += self.vy * dt
-        
+    def update_movement(self, dt):   
+        """Met à jour la position du carré en fonction de sa vitesse et du temps écoulé"""
+        self.x += self.v_x * dt
+        self.y += self.v_y * dt
+
         self.sprite.x = int(self.x)
         self.sprite.y = int(self.y)
 
