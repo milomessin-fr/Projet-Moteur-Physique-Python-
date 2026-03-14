@@ -74,8 +74,7 @@ class MoteurPhysique:
                         input_debug = input("Commande debug >")
                         if input_debug == "help":
                             print("Commandes disponibles :")
-                            print("- dir(objet) : Permet d'accéder aux méthodes et attributs d'un objet")
-                            print("- vars(objet) : Affiche les valeurs d'un objet")
+                            print("- config.'vars' : GRAVITE, RIGIDITE, GRAINS_QUANTITY.")
                             print("- python code : Permet d'exécuter du code Python en temps réel")
                             print("- exit : Quitte le mode debug")
                         if input_debug == "exit":
