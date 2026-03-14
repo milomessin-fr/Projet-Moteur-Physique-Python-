@@ -7,9 +7,10 @@ class Carre:
         self.sprite.owner = self
         self.x = x
         self.y = y
-        self.v_x = 0
-        self.v_y = 0
-        self.GRAVITE = 800 
+        self.v_x = 70
+        self.v_y = 2000
+        self.GRAVITE = 800
+        self.on_ground = False 
 
 
     def retourner_position(self):
@@ -25,10 +26,12 @@ class Carre:
     def update_movement(self, dt):   
         """Met à jour la position du carré en fonction de sa vitesse et du temps écoulé"""
         self.x += self.v_x * dt
-        self.v_y += self.GRAVITE * dt 
-        self.y += self.v_y * dt
-        
-        self.sprite.x = float(self.x)
-        self.sprite.y = float(self.y)
 
+        if not self.on_ground:
+            self.v_y += self.GRAVITE * dt
+
+        self.y += self.v_y * dt
+        #print(f"v_y={self.v_y:.2f} | y={self.y:.2f} | on_ground={self.on_ground}")
+        self.sprite.x = round(self.x)
+        self.sprite.y = round(self.y)
 
