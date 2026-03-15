@@ -40,12 +40,4 @@ complexe et difficile a imaginer des recherches approfondis seront nécéssaires
 - ajouté un coefficient de dissipation (friction) sinon les grains sur l'axe x ne s'arreteront jamais
 
 
-### Tache 
 
-- Gérer la data des matériaux
-
-- Gérer la colision la masse la vitesse
-
-- gérer l'interface 
-
-- gérer la liaison entre les calculs et l'interface 
