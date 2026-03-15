@@ -1,5 +1,5 @@
 
-Titre : système de scene, entité, colision séparé (approche orienté ECS=Entity Component System)
+#Titre : système de scene, entité, colision séparé (approche orienté ECS=Entity Component System)
 
 Pour cela j'ai besoin de thread qui sépare le rendu, du calcul de colision
 Dans la boucle de jeu, on efface en boucle l'écran et si il ya une scene de chosis alors on la déssine en boucle. En parallèle toujours faire tourner 
@@ -21,16 +21,16 @@ complexe et difficile a imaginer des recherches approfondis seront nécéssaires
 
 
 
-Séparation des Threads: rendu et physique concept a utilisé :
--Double Buffering
+### Séparation des Threads: rendu et physique concept a utilisé :
+- Double Buffering
 
-Les Bordures des entités : 
--Oui mais faire un mode Static = True pour les entités
+### Les Bordures des entités : 
+- Oui mais faire un mode Static = True pour les entités
 
 Le Problème de l'Explosion (Transfert de Force) concept a utilisé :
--Rayon d'explosion
--Vecteur répulsion= Pour chaque grains dans le rayon d'explosion il faudra calculer un vecteur qui du centre de la boule au grains 
--Calcul d'impulsion trouvé : v_grain ​= v_grain​+(V_boule​⋅M_boule / dist**2​​) 
+- Rayon d'explosion
+- Vecteur répulsion= Pour chaque grains dans le rayon d'explosion il faudra calculer un vecteur qui du centre de la boule au grains 
+- Calcul d'impulsion trouvé : v_grain ​= v_grain​+(V_boule​⋅M_boule / dist**2​​) 
                             dist = la distance euclidienne entre le centre de la boule et le grain de sable individuel (regarde le calcul de dist sur internet)
                             V_boule = vecteur vitesse de la boule donc v_y
                             M_boule = Masse de la boule
