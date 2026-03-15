@@ -27,7 +27,7 @@ complexe et difficile a imaginer des recherches approfondis seront nécéssaires
 ### Les Bordures des entités : 
 - Oui mais faire un mode Static = True pour les entités
 
-Le Problème de l'Explosion (Transfert de Force) concept a utilisé :
+### Le Problème de l'Explosion (Transfert de Force) concept a utilisé :
 - Rayon d'explosion
 - Vecteur répulsion= Pour chaque grains dans le rayon d'explosion il faudra calculer un vecteur qui du centre de la boule au grains 
 - Calcul d'impulsion trouvé : v_grain ​= v_grain​+(V_boule​⋅M_boule / dist**2​​) 
