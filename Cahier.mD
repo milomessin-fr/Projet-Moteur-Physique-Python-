@@ -1,55 +1,41 @@
 
-Mécanique envisagé de base :
+Titre : système de scene, entité, colision séparé (approche orienté ECS=Entity Component System)
 
--Physique de la boule : Intégration d'Euler ou Verlet pour le mouvement (gravité, accélération).
--Gestion des matériaux : Système de friction et de restitution (rebond) paramétrable pour la boule.
-
-Interface : 
-
--Rendu sdl2 : Affichage propre des textures et rendu fluide des pixels sable ect ...
--menu de configuration sur le haut ou coté de la fenetre ou on peut choisir le matériaux.
-
-Spécification techniques: 
-
--langage: Python 3 
--rendu: pysdl2
--Mathématiques: utilisation de numpy 
-
-Conseil de l'ia :
-### Le dilemme du sable : Automate Cellulaire vs Particules
-
-C'est le choix technique le plus critique de ton projet.
-
-- **L'approche "Falling Sand" (Automate Cellulaire) :** Tu divises ton écran en une grille (ex: 200x200). Chaque case est soit vide, soit du sable. C'est très performant et facile à coder en Python/NumPy.
-    
-- **L'approche "DEM" (Particules réelles) :** Chaque grain est un petit cercle avec une vitesse et une masse. C'est magnifique, mais au-delà de 500 grains, Python va commencer à bégayer sérieusement sans optimisation massive.
-    
-
-> **Conseil :** Pars sur une **grille (Automate Cellulaire)** pour le sable, et une **entité physique réelle** pour la boule. C'est le meilleur compromis performance/rendu.
+Pour cela j'ai besoin de thread qui sépare le rendu, du calcul de colision
+Dans la boucle de jeu, on efface en boucle l'écran et si il ya une scene de chosis alors on la déssine en boucle. En parallèle toujours faire tourner 
+le calcul de colision qui sera le coeur de notre moteur, il y aura plusieurs rendu mais un moteur physique. Ne surtout pas mettre calcul dans les entités 
+elles doivent rester simple et optimiser. Un dossier config en python me semble le plus pratique car c'est plus simple de modifier les variables en temps réel
+qu'un json par exemple mais c'est possible que ce ne soit pas le plus pratique. Dans cette idée, il y aura une class de calcul de colision,vitesse. Ce qui serait 
+bien ça serait que les calculs de colisions entre les entités servents aussi pour les calculs de colision avec les bordure et qu'il ne soit pas séparé.
+Je me demande si faire en sorte que la bordure sois une entité serait-une bonne idée ou non. Sachant que le système d'apparitions de grains et les calculs 
+de leur colision sera réalisé grâce a une grille, cela nous permet de faire une hypothèse comme quoi si il n'y a aucun grains en dessous alors le grains choisit 
+prend de la vitesse en augmentent la valeur de la variable v_y qui est un vecteur directionnel sur l'ordonnés, et si le grain rencontre une case remplis alors 
+v_y sera multiplié par le coefficient de rigidité. Pour une physique plus poussé du sable il faut également géré le vecteur de l'abscisse v_x, j'ai déjà réfléchis
+a comment faire et je pense que vérifier les diagonales et la présence de grains sur les cases de droite et de gauche, pour donner ou non l'ordre au grains de 
+descendre en diagonales, je pense que faire un calcul qui joue sur la présence d'un grain en diagonale avec la gravite peut permettre au grains de prendre 
+de la vitesse de chute en diagonale si c'est une pile de grains par exemple. Ensuite un autre point dont je n'ai pas vraiment d'hypothèse de comment faire
+ça va être le calcul de la force d'explosion, ce que je veux dire c'est quand la boule tombera sur les grains il faudra une force qui affectera le plateau de grains
+ma seule piste pour l'instant et de donner une force de répulsion a chaque entité qui sera calculé en fonction de leur vitesse et masse, et donc meme les grains 
+auront une force de répulsion cependant elle sera bien inférieur a celle de la boule, car la boule aura une masse et un poid. Je pense que cette partie est la plus 
+complexe et difficile a imaginer des recherches approfondis seront nécéssaires.  
 
 
-### L'astuce mathématique : L'intégration de Verlet
 
-Oublie l'intégration d'Euler classique (v=v+a×dt). Pour une simulation physique stable, utilise l'**Intégration de Verlet**. Elle est beaucoup plus stable pour les collisions et évite que ta boule ne "s'enfonce" ou ne "rebondisse" à l'infini à cause d'erreurs d'arrondi.
+Séparation des Threads: rendu et physique concept a utilisé :
+-Double Buffering
 
+Les Bordures des entités : 
+-Oui mais faire un mode Static = True pour les entités
 
-### Gestion des Matériaux
-
-Pour que le changement de matériau soit crédible, ne change pas juste la couleur. Joue sur trois variables clés dans ton code :
-
-- **La Masse (m) :** Impacte l'inertie (une boule de plomb déplace plus de sable qu'une boule de polystyrène).
-    
-- **Le Coefficient de Restitution (e) :** Définit si la boule rebondit ou "s'écrase" (ex: 0.1 pour du plomb, 0.8 pour du caoutchouc).
-    
-- **La Friction (μ) :** Définit comment le sable "accroche" la surface de la boule.
-
-### Optimisation PySDL2 + NumPy
-
-Puisque tu es en Python, évite les boucles `for` pour traiter tes grains de sable un par un.
-
-- Utilise **NumPy** pour traiter des tableaux entiers de données.
-    
-- Avec PySDL2, utilise les **SDL_RenderDrawPoints** ou les **Textures** pour l'affichage groupé. Si tu dessines chaque grain avec une commande individuelle, ton processeur va surchauffer avant même que la boule ne touche le sol.
+Le Problème de l'Explosion (Transfert de Force) concept a utilisé :
+-Rayon d'explosion
+-Vecteur répulsion= Pour chaque grains dans le rayon d'explosion il faudra calculer un vecteur qui du centre de la boule au grains 
+-Calcul d'impulsion trouvé : v_grain ​= v_grain​+(V_boule​⋅M_boule / dist**2​​) 
+                            dist = la distance euclidienne entre le centre de la boule et le grain de sable individuel (regarde le calcul de dist sur internet)
+                            V_boule = vecteur vitesse de la boule donc v_y
+                            M_boule = Masse de la boule
+                            v_grain = vecteur de vitesse du grain
+-ajouté un coefficient de dissipation (friction) sinon les grains sur l'axe x ne s'arreteront jamais
 
 
 # Tache 
