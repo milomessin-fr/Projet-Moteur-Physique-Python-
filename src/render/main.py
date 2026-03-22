@@ -8,11 +8,12 @@ import sdl2.sdlttf as ttf
  # divers import
 import random
 import time
+import threading
 
 # import de fichiers
 from ..config import config_window as config
 from .debug import DebugMenu
-from .scene import Scene
+from ..scene import SceneBase
 from ..core.collision import Collision 
 
 
@@ -29,9 +30,8 @@ class MoteurRendu:
         self.WINDOW_HEIGHT = 600
         self.FPS = config.FPS
         self.mode_debug = DebugMenu()
-        self.scene = Scene()
-        self.collision = Collision()
-    
+        self.collision = Collision() #mettre en parametre une table des entity non static
+        
         #setup de la fenetre 
         self.set_window()
 
@@ -46,6 +46,9 @@ class MoteurRendu:
         self.factory = config.FACTORY = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=self.renderer) 
         self.last_time = sdl2.SDL_GetTicks()
         ttf.TTF_Init()
+
+        #initialisation de toutes les scenes
+        self.scene_base = SceneBase(renderer=self.renderer, factory=self.factory)
 
         #lancement de la boucle
         self.run()
@@ -85,8 +88,10 @@ class MoteurRendu:
                
                     
 
-    def setup_scene(self, scene="basic"):
+    def render_scene(self, scene="base"):
         """initialise une scene"""
+        if scene == "base":
+            self.scene_base.construire()
         pass
 
     
@@ -96,13 +101,16 @@ class MoteurRendu:
         """Boucle de l'application"""
 
         self.running = True
-        self.collision.thread.start()
+        self.collision.start()
 
         while self.running:
 
             self.event()
+
             self.fixed_timestep()
-            self.setup_scene()
+            with self.collision.verrou:
+                self.render_scene()
+
 
         self.collision.stop()
         sdl2.ext.quit()
