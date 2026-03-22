@@ -12,8 +12,10 @@ import threading
 
 # import de fichiers
 from ..config import config_window as config
+from ..config import config_collision as configC
+
 from .debug import DebugMenu
-from ..scene import SceneBase
+from ..scene import SceneBase, SceneTEST
 from ..core.collision import Collision 
 
 
@@ -26,12 +28,11 @@ from ..core.collision import Collision
 class MoteurRendu:
     def __init__(self):
         """"Récupération des valeurs"""
-        self.WINDOW_WIDTH = 800
-        self.WINDOW_HEIGHT = 600
+        self.WINDOW_WIDTH = config.WINDOW_WIDTH
+        self.WINDOW_HEIGHT = config.WINDOW_HEIGHT
         self.FPS = config.FPS
         self.mode_debug = DebugMenu()
         self.collision = Collision() #mettre en parametre une table des entity non static
-        
         #setup de la fenetre 
         self.set_window()
 
@@ -48,8 +49,8 @@ class MoteurRendu:
         ttf.TTF_Init()
 
         #initialisation de toutes les scenes
-        self.scene_base = SceneBase(renderer=self.renderer, factory=self.factory)
-
+        self.scene_base = None
+        self.scene_test = None
         #lancement de la boucle
         self.run()
     
@@ -68,6 +69,7 @@ class MoteurRendu:
 
         while accumulator >= self.dt:
             accumulator -= self.dt
+        configC.DT = self.dt
 
 
 
@@ -81,7 +83,7 @@ class MoteurRendu:
             if event.type == sdl2.SDL_QUIT: #ferme l'application
                 self.running = False
             
-            if event.type == SDL_KEYDOWN:
+            if event.type == SDL_KEYDOWN: # lance le mode debug
                 if event.key.keysym.sym == SDLK_SPACE :
                     self.mode_debug.menu()
                     
@@ -91,10 +93,16 @@ class MoteurRendu:
     def render_scene(self, scene="base"):
         """initialise une scene"""
         if scene == "base":
+            if self.scene_base == None :
+                self.scene_base = SceneBase(renderer=self.renderer, factory=self.factory)
             self.scene_base.construire()
+        if scene == "test":
+            if self.scene_test == None:
+                self.scene_test = SceneTEST(renderer=self.renderer, factory=self.factory)
+            self.scene_test.construire()
+        self.renderer.present()
         pass
 
-    
 
 
     def run(self):
@@ -109,7 +117,7 @@ class MoteurRendu:
 
             self.fixed_timestep()
             with self.collision.verrou:
-                self.render_scene()
+                self.render_scene(config.SCENE_now)
 
 
         self.collision.stop()
