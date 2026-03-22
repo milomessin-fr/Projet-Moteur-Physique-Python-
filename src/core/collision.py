@@ -15,7 +15,7 @@ class Collision:
 
         
 
-    def test(self):
+    def test(self): # A supprimer car générer par l'ia pour test le systeme d'entity
         return
         last_ticks = sdl2.SDL_GetTicks()
         
