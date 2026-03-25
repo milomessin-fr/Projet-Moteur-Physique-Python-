@@ -116,6 +116,7 @@ class MoteurRendu:
             self.event()
 
             self.fixed_timestep()
+            
             with self.collision.verrou:
                 self.render_scene(config.SCENE_now)
 
