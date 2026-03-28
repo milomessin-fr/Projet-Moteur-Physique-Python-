@@ -60,4 +60,10 @@ complexe et difficile a imaginer des recherches approfondis seront nécéssaires
 - ajouté un coefficient de dissipation (friction) sinon les grains sur l'axe x ne s'arreteront jamais
 
 
+### Idées
+
+- Différents types de boules avec différentes propriétées ; boule normale, boule en métal, boule en pierre (cassable pourquoi pas), etc...
+- Créer un editeur d'environnement permettant aux utilisateurs de créer leurs propres scènes. Il faut inclure des objets comme rampes, planches, cordes magnétiques, eau (pas de calculs très complexes si pas nécéssaires), ventilateurs, etc...
+- Contrôler la boule qui laisserait potentiellement place à un mode multijoueur
+
 
